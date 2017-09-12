@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="Weather.Weathers.WeatherView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:weather="clr-namespace:Weather.Weathers"
+        xmlns:local="clr-namespace:Weather"
+        xmlns:behaviors="clr-namespace:Weather.Behaviors"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        mc:Ignorable="d"
+        Height="200" Width="500"
+        local:ViewModelLocator.AutoWireViewModel="True">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <ei:CallMethodAction TargetObject="{Binding}" MethodName="Load"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal"
+                    FocusManager.FocusedElement="{Binding ElementName=TxtKeyword}">
+            <Label Content="Enter your city name/zipcode: "/>
+            <TextBox Text="{Binding Keyword, UpdateSourceTrigger=PropertyChanged}"
+                     Name="TxtKeyword"
+                     Margin="5"
+                     Width="100"
+                     Height="20">
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding SearchCommand}"
+                                Key="Return"/>
+                </TextBox.InputBindings>
+            </TextBox>
+            <Button Command="{Binding SearchCommand}" 
+                    Content="Search" 
+                    Margin="5" 
+                    Width="50"
+                    Height="20"
+                    FontSize="10">
+                <i:Interaction.Behaviors>
+                    <behaviors:GetFocusBehavior FocusElement="{Binding ElementName=TxtKeyword, Mode=OneWay}"/>
+                    <behaviors:SelectAllBehavior SelectAllElement="{Binding ElementName=TxtKeyword, Mode=OneWay}"/>
+                </i:Interaction.Behaviors>
+            </Button>
+            <Button Command="{Binding ClearCommand}" 
+                    Content="Clear" 
+                    Margin="5" 
+                    Width="50"
+                    Height="20"
+                    FontSize="10">
+                <i:Interaction.Behaviors>
+                    <behaviors:GetFocusBehavior FocusElement="{Binding ElementName=TxtKeyword, Mode=OneWay}"/>
+                </i:Interaction.Behaviors>
+            </Button>
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <Label Content="{Binding Name}" ContentStringFormat="Location: {0}"
+                   Height="30"
+                   FontSize="10"/>
+            <Label Content="{Binding Temperature}" ContentStringFormat="Temperature: {0}"
+                   Height="30"
+                   FontSize="10"/>
+            <Label Content="{Binding Humidity}" ContentStringFormat="Humidity: {0}"
+                   Height="30"
+                   FontSize="10"/>
+            <Label Content="{Binding Desc}" ContentStringFormat="It has {0} today"
+                   Height="30"
+                   FontSize="10"/>
+        </StackPanel>
+        
+    </Grid>
+</UserControl>
